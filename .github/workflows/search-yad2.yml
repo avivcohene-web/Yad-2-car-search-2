@@ -1,0 +1,58 @@
+name: Search Yad2
+
+on:
+  workflow_dispatch:
+    inputs:
+      price_max:
+        description: Maximum price (ILS)
+        required: true
+        default: "12000"
+      year_min:
+        description: Minimum year
+        required: true
+        default: "2007"
+      mileage_max:
+        description: Maximum mileage
+        required: true
+        default: "220000"
+      hand_max:
+        description: Maximum hand
+        required: true
+        default: "5"
+      pages:
+        description: Pages to scan (1-10)
+        required: true
+        default: "3"
+      limit:
+        description: Results to keep
+        required: true
+        default: "20"
+
+permissions:
+  contents: read
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm install
+      - run: npm run build
+      - name: Search live Yad2 listings
+        env:
+          REEF_API_KEY: ${{ secrets.REEF_API_KEY }}
+        run: |
+          node dist/search-cli.js             --price-max="${{ inputs.price_max }}"             --year-min="${{ inputs.year_min }}"             --mileage-max="${{ inputs.mileage_max }}"             --hand-max="${{ inputs.hand_max }}"             --pages="${{ inputs.pages }}"             --limit="${{ inputs.limit }}" > yad2-results.json
+      - name: Show search summary
+        run: |
+          node -e 'const x=require("./yad2-results.json"); console.log(JSON.stringify({filters:x.filters,unique_listings_scanned:x.unique_listings_scanned,top:x.results.slice(0,10)},null,2))'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: yad2-results
+          path: yad2-results.json
+          retention-days: 7
