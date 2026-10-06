@@ -4,7 +4,7 @@ if (!API_KEY) throw new Error("REEF_API_KEY is missing");
 
 function arg(name: string, fallback: string) {
   const p = process.argv.find(x => x.startsWith(`--${name}=`));
-  return p ? p.slice(name.length + 3) : fallback;
+  const v = p ? p.slice(name.length + 3) : "";\n  return v ? v : fallback;
 }
 const price_max = Number(arg("price-max","12000"));
 const year_min = Number(arg("year-min","2007"));
