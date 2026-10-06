@@ -1,6 +1,9 @@
 name: Search Yad2
 
 on:
+  push:
+    branches: [main]
+    paths: [search-request.json]
   workflow_dispatch:
     inputs:
       price_max:
