@@ -8,12 +8,14 @@ function arg(name: string, fallback: string) {
   const v = p ? p.slice(name.length + 3) : "";
   return v ? v : fallback;
 }
-const price_max = Number(arg("price-max","12000"));
-const year_min = Number(arg("year-min","2007"));
-const mileage_max = Number(arg("mileage-max","220000"));
-const hand_max = Number(arg("hand-max","5"));
-const pages = Math.min(10, Math.max(1, Number(arg("pages","3"))));
-const limit = Math.min(50, Math.max(1, Number(arg("limit","20"))));
+let req:any={}; try { req=JSON.parse(readFileSync("search-request.json","utf8")); } catch {}
+const price_max = Number(arg("price-max",String(req.price_max ?? 12000)));
+const year_min = Number(arg("year-min",String(req.year_min ?? 2007)));
+const year_max = Number(arg("year-max",String(req.year_max ?? 2026)));
+const mileage_max = Number(arg("mileage-max",String(req.mileage_max ?? 220000)));
+const hand_max = Number(arg("hand-max",String(req.hand_max ?? 5)));
+const pages = Math.min(10, Math.max(1, Number(arg("pages",String(req.pages ?? 3)))));
+const limit = Math.min(50, Math.max(1, Number(arg("limit",String(req.limit ?? 20)))));
 
 async function reef(path:string, body:Record<string,unknown>) {
   const r=await fetch(`${BASE}${path}`,{
