@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 const API_KEY = process.env.REEF_API_KEY;
 const BASE = process.env.REEF_BASE_URL || "https://api.reefapi.com";
 if (!API_KEY) throw new Error("REEF_API_KEY is missing");
@@ -32,12 +33,21 @@ const preferred=["sx4","swift","סוויפט","mazda 2","מאזדה 2","tiida","
 const risky=["dsg","powershift","edc","robot","רובוט","stage 1","stage1"];
 const all:any[]=[];
 for(let page=1;page<=pages;page++){
-  const r=await reef("/yad2/v1/cars/search",{price_max,year_min,mileage_max,hand_max,only_with_price:true,only_with_images:true,page});
+  const r=await reef("/yad2/v1/cars/search",{price_max,year_min,year_max,mileage_max,hand_max,only_with_price:true,only_with_images:true,page});
   all.push(...arr(r.data));
 }
 const map=new Map<string,any>();
 for(const x of all){const id=String(x.ad_id??x.id??x.token??x.url??JSON.stringify(x));if(!map.has(id))map.set(id,x);}
-const results=[...map.values()].map(x=>{
+const clean=[...map.values()].filter(x=>{
+ const price=num(x.price), year=num(x.year??x.vehicle_year), km=num(x.mileage??x.km), hand=num(x.hand);
+ if(price===undefined || price<100 || price>price_max) return false;
+ if(x.price_not_published===true || x.price_placeholder===true || x.payment_installments) return false;
+ if(year===undefined || year<year_min || year>year_max) return false;
+ if(km!==undefined && km>mileage_max) return false;
+ if(hand!==undefined && hand>hand_max) return false;
+ return true;
+});
+const results=clean.map(x=>{
  const price=num(x.price)??price_max, km=num(x.mileage??x.km), year=num(x.year??x.vehicle_year), hand=num(x.hand), t=txt(x);
  let score=50;
  score+=Math.max(0,(price_max-price)/price_max*18);
@@ -49,5 +59,5 @@ const results=[...map.values()].map(x=>{
  if(risky.some(k=>t.includes(k)))score-=12;
  return {score:Math.round(score*10)/10,...x};
 }).sort((a,b)=>b.score-a.score).slice(0,limit);
-const out={generated_at:new Date().toISOString(),filters:{price_max,year_min,mileage_max,hand_max,pages,limit},unique_listings_scanned:map.size,results};
+const out={generated_at:new Date().toISOString(),filters:{price_max,year_min,year_max,mileage_max,hand_max,pages,limit},unique_listings_scanned:map.size,clean_listings:clean.length,results};
 process.stdout.write(JSON.stringify(out,null,2));
