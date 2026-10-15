@@ -58,7 +58,9 @@ const results=clean.map(x=>{
  if(hand!==undefined)score+=Math.max(-5,6-hand*1.2);
  if(preferred.some(k=>t.includes(k)))score+=8;
  if(/hatch|האצ.?בק|5 דלת/i.test(t))score+=4;
- if(risky.some(k=>t.includes(k)))score-=30;\n if(/אוט׳|אוטומט|automatic/i.test(t))score+=12;\n if(price<3500)score-=20;
+ if(risky.some(k=>t.includes(k)))score-=30; 
+ if(/אוט׳|אוטומט|automatic/i.test(t))score+=12; 
+ if(price<3500)score-=20;
  return {score:Math.round(score*10)/10,...x};
 }).filter(x=>!(/ידני|manual|powershift|edc|רובוט/i.test(txt(x)))).sort((a,b)=>b.score-a.score).slice(0,limit);
 const out={generated_at:new Date().toISOString(),filters:{price_max,year_min,year_max,mileage_max,hand_max,pages,limit},unique_listings_scanned:map.size,clean_listings:clean.length,results};
