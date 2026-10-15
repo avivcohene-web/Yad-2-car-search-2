@@ -31,8 +31,8 @@ async function reef(path:string, body:Record<string,unknown>) {
 function arr(d:any):any[]{ return Array.isArray(d?.listings)?d.listings:Array.isArray(d?.items)?d.items:Array.isArray(d)?d:[]; }
 function num(v:any){ if(typeof v==="number") return v; if(typeof v==="string"){const x=Number(v.replace(/[^0-9.]/g,"")); if(Number.isFinite(x))return x;} }
 function txt(x:any){return [x?.title,x?.manufacturer?.name,x?.manufacturer,x?.model?.name,x?.model,x?.gearbox,x?.family_type,x?.description].filter(Boolean).join(" ").toLowerCase();}
-const preferred=["sx4","swift","סוויפט","mazda 2","מאזדה 2","tiida","טידה","getz","גטס","i10","sirion","סיריון"];
-const risky=["dsg","powershift","edc","robot","רובוט","stage 1","stage1"];
+const preferred=["sx4","swift","סוויפט","mazda 2","מאזדה 2","tiida","טידה","getz","גטס","i10","sirion","סיריון","פאביה","fabia","ריו","rio","פיקנטו","picanto","i20","i30","יאריס","yaris","ג׳אז","ג\u0027אז","jazz","קורולה","corolla","סיוויק","civic","מאזדה 3","לנסר","lancer"];
+const risky=["dsg","powershift","edc","robot","רובוט","stage 1","stage1","ידני","manual","טורבו"];
 const all:any[]=[];
 for(let page=1;page<=pages;page++){
   const r=await reef("/yad2/v1/cars/search",{price_max,year_min,year_max,mileage_max,hand_max,only_with_price:true,only_with_images:true,page});
@@ -58,8 +58,8 @@ const results=clean.map(x=>{
  if(hand!==undefined)score+=Math.max(-5,6-hand*1.2);
  if(preferred.some(k=>t.includes(k)))score+=8;
  if(/hatch|האצ.?בק|5 דלת/i.test(t))score+=4;
- if(risky.some(k=>t.includes(k)))score-=12;
+ if(risky.some(k=>t.includes(k)))score-=30;\n if(/אוט׳|אוטומט|automatic/i.test(t))score+=12;\n if(price<3500)score-=20;
  return {score:Math.round(score*10)/10,...x};
-}).sort((a,b)=>b.score-a.score).slice(0,limit);
+}).filter(x=>!(/ידני|manual|powershift|edc|רובוט/i.test(txt(x)))).sort((a,b)=>b.score-a.score).slice(0,limit);
 const out={generated_at:new Date().toISOString(),filters:{price_max,year_min,year_max,mileage_max,hand_max,pages,limit},unique_listings_scanned:map.size,clean_listings:clean.length,results};
 process.stdout.write(JSON.stringify(out,null,2));
