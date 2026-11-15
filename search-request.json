@@ -39,5 +39,6 @@
     "Kia Ceed",
     "Daihatsu Sirion"
   ],
-  "note": "Search broadly across all brands. Model list is a ranking bonus, not an allowlist; confirm exact gearbox and engine before purchase."
+  "note": "Broad scan; auto shortlist rejects known dry-clutch DSG7, Ceed 2013+ petrol DCT, Micra 1.2 CVT, PowerShift, robotized and wet-belt variants. Unknown variants need manual verification.",
+  "validation_pass": "2026-11-15-model-specific-gearbox-recheck"
 }
