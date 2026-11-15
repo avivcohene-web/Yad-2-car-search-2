@@ -94,7 +94,7 @@ function listingArray(data: any): any[] {
 }
 
 function textOf(x: any) {
-  return [x?.title, x?.manufacturer?.name, x?.manufacturer, x?.model?.name, x?.model, x?.gearbox, x?.family_type]
+  return [x?.title, x?.manufacturer?.name, x?.manufacturer, x?.model?.name, x?.model, x?.gearbox, x?.family_type, x?.description]
     .filter(Boolean).join(" ").toLowerCase();
 }
 
@@ -110,7 +110,7 @@ server.tool(
     gearbox: z.string().optional(),
     pages: z.number().int().min(1).max(10).default(3),
     limit: z.number().int().min(1).max(50).default(15),
-    prefer_hatchback: z.boolean().default(true)
+    prefer_hatchback: z.boolean().default(false)
   },
   async ({ price_max, year_min, mileage_max, hand_max, top_area_id, gearbox, pages, limit, prefer_hatchback }) => {
     const all: any[] = [];
@@ -131,10 +131,20 @@ server.tool(
       if (!dedup.has(id)) dedup.set(id, x);
     }
 
-    const preferred = ["sx4", "סוויפט", "swift", "מאזדה 2", "mazda 2", "טידה", "tiida", "גטס", "getz", "i10"];
-    const caution = ["dsg", "powershift", "edc", "robot", "רובוט", "turbo", "טורבו", "stage 1"];
+    const preferred = ["מאזדה 2", "מאזדה 3", "מאזדה 6", "mazda 2", "mazda 3", "mazda 6", "סיוויק", "civic", "ג'אז", "jazz", "קורולה", "corolla", "יאריס", "yaris", "אוריס", "auris", "סוויפט", "swift", "sx4", "גטס", "getz", "i10", "i20", "i30", "ריו", "rio", "סיד", "ceed", "סיריון", "sirion", "פאביה", "fabia", "פוקוס", "focus", "מאזדה", "הונדה", "יונדאי", "טויוטה", "קיה", "סוזוקי"];
+    const caution = ["cvt", "רציף", "stage 1", "סטייג"];
+    const excludedBrand = /peugeot|citroen|citroën|renault|dacia|פיג['׳’]?ו|סיטרואן|רנו|דאצ'יה/i;
+    const excludedTech = /dsg\s*7|dq200|powershift|power\s*shift|edc|i-?shift|m-?mt|dual?ogic|wet.?belt|puretech|רובוטי|רובוטית|מצמדים? יבשים|רצועה רטובה|רצועת טיימינג רטובה/i;
+    const knownRisk = (x: any) => {
+      const t = textOf(x);
+      const year = n(x.year ?? x.vehicle_year);
+      if (excludedBrand.test(t) || excludedTech.test(t) || /ידני|manual/i.test(t)) return true;
+      if (year !== undefined && year >= 2012 && year <= 2016 && /(focus|פוקוס|fiesta|פיאסטה)/i.test(t) && /אוט|automatic/i.test(t)) return true;
+      if (year !== undefined && year >= 2009 && year <= 2015 && /(golf|גולף|polo|פולו|ibiza|איביזה|fabia|פאביה|octavia|אוקטביה)/i.test(t) && /אוט|automatic/i.test(t) && /(1\.2|1\.4|tsi|turbo|טורבו|1\.6)/i.test(t)) return true;
+      return false;
+    };
 
-    const ranked = [...dedup.values()].map(x => {
+    const ranked = [...dedup.values()].filter(x => !knownRisk(x)).map(x => {
       const price = n(x.price) ?? price_max;
       const km = n(x.mileage ?? x.km);
       const year = n(x.year ?? x.vehicle_year);
