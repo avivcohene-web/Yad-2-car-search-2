@@ -68,12 +68,16 @@ const reliableModelNames = [
   "אימפרזה", "impreza", "b3", "lancer", "לנסר", "קולט", "colt"
 ];
 // Exclude only explicit powertrain risks. Unknown versions are flagged for inspection, not assumed safe.
-const rejectedBrands = /פיג['׳’]?ו|peugeot|סיטרואן|citro[eë]n|citroen|רנו\b|renault|דאצ'יה|dacia/i;
+const rejectedBrands = /פיג['׳’]?ו|peugeot|סיטרואן|citro[eë]n|citroen|רנו|renault|דאצ'יה|dacia/i;
 const rejectedTransmissions = /\b(dsg\s*7|dq200|powershift|power\s*shift|edc|i-?shift|m-?mt|dual?ogic|al4)\b|מצמדים? יבשים|גיר רובוטי|רובוטית|רובוטי חד|רצועת טיימינג רטובה|רצועה רטובה|wet.?belt|puretech/i;
 const automaticSignals = /אוט(?:׳|'|ומט)|automatic|tiptronic|פלנטרי|cvt|dsg|רציף/i;
 const manualSignals = /ידני|manual|manual transmission/i;
 function knownHighRisk(t: string, year: number | undefined, cc: number | undefined) {
   if (rejectedBrands.test(t) || rejectedTransmissions.test(t)) return true;
+  // 2013+ petrol Ceed 135 hp used a dual-clutch DCT, not the earlier 4-speed automatic.
+  if (year !== undefined && year >= 2013 && year <= 2015 && /(ceed|סיד)/i.test(t) && /(135|gdi)/i.test(t) && automaticSignals.test(t)) return true;
+  // 1.2 Micra CVT generation: avoid the Jatco CVT for this low-risk search.
+  if (year !== undefined && year >= 2010 && year <= 2015 && /(micra|מיקרה)/i.test(t) && /1\.2|1198/.test(t) && automaticSignals.test(t)) return true;
   if (manualSignals.test(t) && !automaticSignals.test(t)) return true;
   // Ford Focus/Fiesta automatic dual-clutch variants: verify year before applying.
   if (year !== undefined && year >= 2012 && year <= 2016 && /(focus|פוקוס|fiesta|פיאסטה)/i.test(t) && automaticSignals.test(t)) return true;
