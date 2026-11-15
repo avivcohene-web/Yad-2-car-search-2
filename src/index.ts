@@ -141,8 +141,11 @@ server.tool(
       if (excludedBrand.test(t) || excludedTech.test(t) || /ידני|manual/i.test(t)) return true;
       if (year !== undefined && year >= 2013 && year <= 2015 && /(ceed|סיד)/i.test(t) && /(135|gdi)/i.test(t) && /אוט|automatic/i.test(t)) return true;
       if (year !== undefined && year >= 2010 && year <= 2015 && /(micra|מיקרה)/i.test(t) && /1\.2|1198/.test(t) && /אוט|automatic/i.test(t)) return true;
+      if (year !== undefined && year >= 2012 && /(subaru|סובארו|impreza|אימפרזה)/i.test(t) && /אוט|automatic/i.test(t)) return true;
+      if (year !== undefined && year >= 2008 && /(lancer|לנסר)/i.test(t) && /(1\.8|1798)/.test(t) && /אוט|automatic/i.test(t)) return true;
       if (year !== undefined && year >= 2012 && year <= 2016 && /(focus|פוקוס|fiesta|פיאסטה)/i.test(t) && /אוט|automatic/i.test(t)) return true;
-      if (year !== undefined && year >= 2009 && year <= 2015 && /(golf|גולף|polo|פולו|ibiza|איביזה|fabia|פאביה|octavia|אוקטביה)/i.test(t) && /אוט|automatic/i.test(t) && /(1\.2|1\.4|tsi|turbo|טורבו|1\.6)/i.test(t)) return true;
+      if (year !== undefined && year >= 2009 && year <= 2015 && /(golf|גולף|polo|פולו|ibiza|איביזה|fabia|פאביה|octavia|אוקטביה)/i.test(t) && /אוט|automatic/i.test(t) && /(1\.2|1\.4|tsi|turbo|טורבו)/i.test(t)) return true;
+      if (year !== undefined && year >= 2009 && year <= 2013 && /(golf|גולף)/i.test(t) && /אוט|automatic/i.test(t) && /1\.6/.test(t)) return true;
       return false;
     };
 
