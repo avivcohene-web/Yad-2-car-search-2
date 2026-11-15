@@ -39,6 +39,6 @@
     "Kia Ceed",
     "Daihatsu Sirion"
   ],
-  "note": "Broad scan; auto shortlist rejects known dry-clutch DSG7, Ceed 2013+ petrol DCT, Micra 1.2 CVT, PowerShift, robotized and wet-belt variants. Unknown variants need manual verification.",
-  "validation_pass": "2026-11-15-model-specific-gearbox-recheck"
+  "note": "Automatic preferred, all body styles; verified model-specific exclusions include 2013+ petrol Ceed DCT, Micra 1.2 CVT, 2012+ Subaru Impreza CVT, Lancer 1.8 CVT, dry-clutch DSG7, PowerShift, robotized and wet-belt variants; unknown versions require manual confirmation.",
+  "validation_pass": "2026-11-15-final-powertrain-audit"
 }
