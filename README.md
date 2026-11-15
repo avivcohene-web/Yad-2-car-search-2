@@ -36,18 +36,18 @@ Example MCP client configuration:
 }
 ```
 
-## Aviv search preset
+## Aviv search preset (broad reliability-first search)
 
-For the current car hunt, start with:
-- budget: up to ₪12,000
-- year: 2007+
-- mileage: up to 220,000 km
-- automatic preferred
-- Center / Sharon area preferred
-- hatchback preferred
-- prioritize simple, reliable powertrains and low repair risk
-
-Do not automatically reject a car only because it falls outside a preference; condition and service history matter heavily at this budget.
+- Target purchase price: up to ₪12,000; discover promising ads up to ₪14,000.
+- Model years: 2005–2015. Mileage: up to 240,000 km; hand: up to 7.
+- Body styles: ALL, including sedans, hatchbacks, and wagons (e.g. Mazda 2/3/6 and Honda Civic).
+- Automatic preferred. Include reliable conventional torque-converter automatic variants even in older European cars.
+- Focus: reliable Mazda, Honda, Toyota, Suzuki, Hyundai, Kia, Daihatsu, Nissan, Mitsubishi, Subaru, and appropriate Ford/Skoda variants; other reliable models can appear too.
+- Hard reject: Peugeot/Citroën/Renault/Dacia; explicit dry DSG7/DQ200, PowerShift, EDC, i-Shift, M-MT, Dualogic, robotized single-clutch, PureTech and wet timing belts; manually driven cars.
+- If the listing does not document the EXACT gearbox or engine, keep it for manual verification and **do not mark it as confirmed safe**.
+- Regional priority: Center/Sharon/Hadera; broad discovery first rather than missing good ads.
+- Ranking is ONLY preliminary. Confirm the exact engine, gearbox, timing system, service history, accident condition, and liens before purchase.
+- Use `search-request.json` to change scan limits. A push of that file triggers the GitHub Action search.
 
 ## Data source
 
