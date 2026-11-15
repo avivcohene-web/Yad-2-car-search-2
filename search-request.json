@@ -1,11 +1,43 @@
 {
-  "price_max": 12000,
-  "year_min": 2008,
-  "year_max": 2014,
-  "mileage_max": 160000,
-  "hand_max": 5,
-  "pages": 8,
+  "price_max": 14000,
+  "target_price_max": 12000,
+  "year_min": 2005,
+  "year_max": 2015,
+  "mileage_max": 240000,
+  "hand_max": 7,
+  "pages": 10,
   "limit": 50,
-  "preset": "reliable-hatchbacks",
-  "run": 15
+  "body_styles": "all",
+  "transmission": "automatic-preferred",
+  "geography": "center-sharon-hadera-preferred",
+  "excluded_technologies": [
+    "DSG7 dry clutch / DQ200",
+    "PowerShift / EDC / i-Shift / M-MT / Dualogic",
+    "wet timing belt"
+  ],
+  "excluded_brands": [
+    "Peugeot",
+    "Citroen",
+    "Renault",
+    "Dacia"
+  ],
+  "priority_models": [
+    "Mazda 2",
+    "Mazda 3",
+    "Mazda 6",
+    "Honda Civic",
+    "Honda Jazz",
+    "Toyota Corolla",
+    "Toyota Yaris",
+    "Toyota Auris",
+    "Suzuki Swift",
+    "Suzuki SX4",
+    "Hyundai Getz",
+    "Hyundai i20",
+    "Hyundai i30",
+    "Kia Rio",
+    "Kia Ceed",
+    "Daihatsu Sirion"
+  ],
+  "note": "Search broadly across all brands. Model list is a ranking bonus, not an allowlist; confirm exact gearbox and engine before purchase."
 }
